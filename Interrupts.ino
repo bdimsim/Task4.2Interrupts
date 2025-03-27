@@ -24,7 +24,7 @@ void setup() {
   pinMode(sonarTriggerPin, OUTPUT); // OUTPUT is LOW by default
   pinMode(sonarEchoPin, INPUT);
   attachInterrupt(digitalPinToInterrupt(interruptButtonPin), buttonToggleLED, CHANGE); // Pressing the button: HIGH --> LOW. Maybe try FALLING?
-  ITimer.attachInterruptInterval_MS(100, sonarToggleLED); // Documentation recommends intervals over 60ms for echo readings after sending the trigger
+  ITimer.attachInterruptInterval_MS(100, sonarToggleLED); // Documentation recommends intervals over 60ms for echo readings
   Serial.begin(115200);
 }
 
