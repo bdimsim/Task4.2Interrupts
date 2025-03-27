@@ -14,7 +14,7 @@ const int DISTANCE_THRESHOLD = 10;
 // with ISRs to properly reflect their values in the main loop
 volatile byte ledState = LOW;
 
-// Timer Counters (TC): used for general purpose time-based events. Supports 
+// Timer Counters (TC): used for general purpose time-based events.
 // Timer Counter for Control (TCC): used for high precision tasks like PWM
 SAMDTimer ITimer(TIMER_TC3); // TC is suitable for our regular period measurements
 
@@ -23,7 +23,7 @@ void setup() {
   pinMode(interruptButtonPin, INPUT_PULLUP); // INPUT_PULLUP is HIGH by default
   pinMode(sonarTriggerPin, OUTPUT); // OUTPUT is LOW by default
   pinMode(sonarEchoPin, INPUT);
-  attachInterrupt(digitalPinToInterrupt(interruptButtonPin), buttonToggleLED, CHANGE); // Pressing the button brings it LOW
+  attachInterrupt(digitalPinToInterrupt(interruptButtonPin), buttonToggleLED, CHANGE); // Pressing the button: HIGH --> LOW. Maybe try FALLING?
   ITimer.attachInterruptInterval_MS(100, sonarToggleLED); // Documentation recommends intervals over 60ms for echo readings after sending the trigger
   Serial.begin(115200);
 }
@@ -48,10 +48,10 @@ void buttonToggleLED() {
 }
 
 void sonarToggleLED() {
-  digitalWrite(sonarTriggerPin, HIGH);
+  digitalWrite(sonarTriggerPin, HIGH); // Start pulse
   delayMicroseconds(10); // A 10us high pulse is needed to trigger the sensor
-  digitalWrite(sonarTriggerPin, LOW);
-  float duration_us = pulseIn(sonarEchoPin, HIGH); // Time in microseconds
+  digitalWrite(sonarTriggerPin, LOW); // End pulse
+  float duration_us = pulseIn(sonarEchoPin, HIGH); // Read pulse through echo. Time in microseconds
   float distance_cm = 0.017 * duration_us; // Convert to distance in cm
 
   if(distance_cm <= DISTANCE_THRESHOLD) {
